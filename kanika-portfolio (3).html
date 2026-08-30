@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanika — Analytics Engineer (in progress)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1620;
+    --bg-alt:#0F1D2A;
+    --panel:#10202E;
+    --line:#1E3241;
+    --text:#DCE8EC;
+    --text-dim:#7C93A0;
+    --text-faint:#4B5F6C;
+    --teal:#4FD1C5;
+    --amber:#F0A868;
+    --violet:#9C8CF0;
+    --radius:10px;
+    --mono:'JetBrains Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.15;
+    pointer-events:none;
+    z-index:0;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+  section{padding:110px 0;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--teal);
+    letter-spacing:0.08em;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:"//"; color:var(--text-faint);}
+  h1,h2,h3{font-family:var(--mono); font-weight:600; letter-spacing:-0.01em;}
+  h2{font-size:30px; color:var(--text); margin-bottom:10px;}
+  .lede{color:var(--text-dim); font-size:16px; max-width:560px; margin-bottom:48px;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(11,22,32,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:16px 28px;}
+  .logo{font-family:var(--mono); font-weight:700; font-size:15px; color:var(--text);}
+  .logo span{color:var(--teal);}
+  .navlinks{display:flex; gap:28px; font-family:var(--mono); font-size:13px; color:var(--text-dim);}
+  .navlinks a:hover{color:var(--teal);}
+  @media (max-width:640px){ .navlinks{display:none;} }
+
+  /* HERO */
+  .hero{padding-top:170px; padding-bottom:100px;}
+
+  .hero h1{
+    font-size:44px;
+    margin:0 0 12px;
+    color:var(--text);
+  }
+  .hero h1 .role{color:var(--amber);}
+  .hero p.tag{color:var(--text-dim); font-size:17px; max-width:520px; margin-bottom:30px;}
+  .btnrow{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13px; padding:12px 20px; border-radius:6px;
+    border:1px solid var(--line); transition:all .2s ease;
+  }
+  .btn.primary{background:var(--teal); color:#06181A; border-color:var(--teal); font-weight:600;}
+  .btn.primary:hover{background:#69E0D4;}
+  .btn.ghost{color:var(--text); }
+  .btn.ghost:hover{border-color:var(--teal); color:var(--teal);}
+
+  /* STATS STRIP */
+  .stats{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; margin-top:60px;
+  }
+  .stat{background:var(--bg-alt); padding:22px 18px;}
+  .stat b{display:block; font-family:var(--mono); font-size:22px; color:var(--teal);}
+  .stat span{font-size:12.5px; color:var(--text-dim);}
+  @media (max-width:640px){ .stats{grid-template-columns:repeat(2,1fr);} .hero h1{font-size:32px;} }
+
+  /* ABOUT */
+  .about-grid{display:grid; grid-template-columns:1.4fr 1fr; gap:50px;}
+  @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
+  .about-grid p{color:var(--text-dim); margin-bottom:16px; font-size:15.5px;}
+  .about-grid strong{color:var(--text); font-weight:600;}
+  .panel{
+    background:var(--bg-alt); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px;
+  }
+  .panel h3{font-size:13px; color:var(--amber); margin-bottom:14px; letter-spacing:0.05em;}
+  .kv{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--line); font-size:14px;}
+  .kv:last-child{border-bottom:none;}
+  .kv span:first-child{color:var(--text-dim); font-family:var(--mono); font-size:12.5px;}
+  .kv span:last-child{color:var(--text); font-weight:500; text-align:right;}
+
+  /* SKILLS */
+  .schema{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+  .schema-head{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-faint);
+    padding:10px 18px; border-bottom:1px solid var(--line); background:var(--bg-alt);
+  }
+  .schema-row{
+    display:grid; grid-template-columns:180px 1fr;
+    border-bottom:1px solid var(--line);
+  }
+  .schema-row:last-child{border-bottom:none;}
+  .schema-cat{
+    font-family:var(--mono); font-size:12.5px; color:var(--violet);
+    padding:18px; border-right:1px solid var(--line); background:var(--bg-alt);
+  }
+  .schema-vals{display:flex; flex-wrap:wrap; gap:9px; padding:16px 18px; align-items:center;}
+  .chip{
+    font-family:var(--mono); font-size:12.5px; color:var(--text);
+    border:1px solid var(--line); border-radius:5px; padding:6px 11px;
+    transition:border-color .2s;
+  }
+  .chip:hover{border-color:var(--teal); color:var(--teal);}
+  @media (max-width:640px){ .schema-row{grid-template-columns:1fr;} .schema-cat{border-right:none; border-bottom:1px solid var(--line);} }
+
+  /* PROJECTS */
+  #projects{
+    background:var(--bg-alt);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  #projects::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--teal), var(--amber), transparent);
+  }
+  #projects h2{font-size:34px;}
+  .proj-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media (max-width:900px){ .proj-grid{grid-template-columns:1fr;} }
+  .card{
+    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; display:flex; flex-direction:column; gap:14px;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-4px); border-color:var(--teal); box-shadow:0 16px 40px -20px rgba(79,209,197,0.35);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .card h3{font-size:17px; color:var(--text);}
+  .status{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; color:var(--text-dim); white-space:nowrap;}
+  .status .sd{width:7px; height:7px; border-radius:50%;}
+  .status.live .sd{background:#6BCB77;}
+  .status.dev .sd{background:#F0C868;}
+  .card p{color:var(--text-dim); font-size:14px; flex-grow:1;}
+  .tagrow{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{font-family:var(--mono); font-size:11px; color:var(--amber); border:1px solid var(--line); border-radius:4px; padding:3px 8px;}
+  .card a.link{font-family:var(--mono); font-size:12.5px; color:var(--teal); display:inline-flex; align-items:center; gap:6px; margin-top:4px;}
+  .card a.link:hover{text-decoration:underline;}
+
+  /* CONTACT */
+  .contact-panel{
+    background:var(--bg-alt); border:1px solid var(--line); border-radius:var(--radius);
+    padding:40px; display:grid; grid-template-columns:1.2fr 1fr; gap:36px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .contact-panel::before{
+    content:"";
+    position:absolute; top:-60px; right:-60px; width:200px; height:200px;
+    background:radial-gradient(circle, rgba(79,209,197,0.18), transparent 70%);
+    pointer-events:none;
+  }
+  @media (max-width:720px){ .contact-panel{grid-template-columns:1fr;} }
+  .contact-panel h2{margin-bottom:8px;}
+  .contact-panel p{color:var(--text-dim); font-size:15px;}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:12px; color:#6BCB77;
+    border:1px solid #234A2F; background:rgba(107,203,119,0.08);
+    border-radius:999px; padding:6px 12px; margin-bottom:16px;
+  }
+  .status-pill .sd{width:7px; height:7px; border-radius:50%; background:#6BCB77; animation:blink 1.6s ease-in-out infinite;}
+  .contact-rows{
+    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius);
+    position:relative; z-index:1;
+  }
+  .crow{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:15px 18px; border-bottom:1px solid var(--line);
+    font-family:var(--mono); font-size:13px; transition:background .2s;
+  }
+  .crow:last-child{border-bottom:none;}
+  .crow:hover{background:var(--bg-alt);}
+  .crow span:first-child{color:var(--text-faint);}
+  .crow span:last-child{color:var(--teal);}
+  .socials{display:none;}
+  .social-btn{
+    font-family:var(--mono); font-size:13px; border:1px solid var(--line); border-radius:6px;
+    padding:11px 18px; color:var(--text);
+  }
+  .social-btn:hover{border-color:var(--teal); color:var(--teal);}
+
+  footer{padding:36px 0; border-top:1px solid var(--line); text-align:center;}
+  footer p{font-family:var(--mono); font-size:12px; color:var(--text-faint);}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">K<span>_</span>kanika</div>
+    <div class="navlinks">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Kanika — <span class="role">Future Analytics Engineer</span></h1>
+    <p class="tag">2nd-year B.Tech student, currently pursuing AI & Data Engineering (3rd semester). Learning to turn raw data and code into things that actually work — one project at a time.</p>
+    <div class="btnrow">
+      <a href="#projects" class="btn primary">view projects</a>
+      <a href="#contact" class="btn ghost">get in touch</a>
+      <a href="Kanika-Resume.pdf" class="btn ghost" download>download CV</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>9.03</b><span>CGPA / 10</span></div>
+      <div class="stat"><b>2nd</b><span>year</span></div>
+      <div class="stat"><b>3rd</b><span>semester</span></div>
+      <div class="stat"><b>3</b><span>projects shipped</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">about</div>
+    <h2>Still early, still building</h2>
+    <p class="lede">The short version of where I am and where I'm headed.</p>
+
+    <div class="about-grid reveal">
+      <div>
+        <p>I'm in my <strong>2nd year</strong>, currently pursuing a specialization in <strong>AI & Data Engineering</strong> — now in my 3rd semester. Analytics Engineering is the role I'm building toward: I like the idea of sitting between raw data and the decisions people make from it.</p>
+        <p>Right now that means getting the fundamentals right — programming, data structures, SQL — while actually shipping small projects instead of just reading about them. Each project so far has been picked because I wanted to <strong>use</strong> something I was learning, not just practice it in isolation.</p>
+        <p>I don't have it all figured out yet, and that's fine — this page will keep changing as I do.</p>
+      </div>
+      <div class="panel">
+        <h3>CURRENT_STATUS</h3>
+        <div class="kv"><span>degree</span><span>B.Tech, 2nd year</span></div>
+        <div class="kv"><span>focus</span><span>AI & Data Engineering</span></div>
+        <div class="kv"><span>semester</span><span>3rd</span></div>
+        <div class="kv"><span>cgpa</span><span>9.03 / 10</span></div>
+        <div class="kv"><span>target_role</span><span>Analytics Engineer</span></div>
+        <div class="kv"><span>projects</span><span>3 shipped</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">skills</div>
+    <h2>What I'm working with</h2>
+    <p class="lede">Languages, querying and web tools I'm actively using and learning.</p>
+
+    <div class="schema reveal">
+      <div class="schema-head">skills — grouped by area</div>
+      <div class="schema-row">
+        <div class="schema-cat">languages</div>
+        <div class="schema-vals">
+          <span class="chip">Python</span>
+          <span class="chip">Java</span>
+          <span class="chip">C++</span>
+        </div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-cat">data</div>
+        <div class="schema-vals">
+          <span class="chip">SQL</span>
+          <span class="chip">Excel</span>
+        </div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-cat">web</div>
+        <div class="schema-vals">
+          <span class="chip">HTML</span>
+          <span class="chip">CSS</span>
+          <span class="chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-cat">foundations</div>
+        <div class="schema-vals">
+          <span class="chip">Data Structures & Algorithms</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">projects · the core of this page</div>
+    <h2>Things I've actually built</h2>
+    <p class="lede">Small, real, and still evolving — each one made to learn something by using it.</p>
+
+    <div class="proj-grid reveal">
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Photobooth&#8209;Love</h3>
+          <div class="status live"><span class="sd"></span>live</div>
+        </div>
+        <p>My first project, entirely vibe-coded. An online photostrip app built to actually put HTML, CSS and JS to use while learning them. No backend yet — frontend only, for now.</p>
+        <div class="tagrow">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+        </div>
+        <a class="link" href="https://celebrated-douhua-89602f.netlify.app/" target="_blank" rel="noopener">visit site →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>NotToNote</h3>
+          <div class="status dev"><span class="sd"></span>in progress</div>
+        </div>
+        <p>My second project — a notes-taking app, built because I couldn't find an online note-taker that worked the way I wanted. Still basic, backend not connected yet, and actively being worked on.</p>
+        <div class="tagrow">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+        </div>
+        <a class="link" href="https://codeNkanika.github.io/NotToNote/" target="_blank" rel="noopener">visit site →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>cineWatch</h3>
+          <div class="status live"><span class="sd"></span>live</div>
+        </div>
+        <p>My third project, and the first with a real backend. A to-do-list-style app for movies — track what you're currently watching, have watched, or plan to watch.</p>
+        <div class="tagrow">
+          <span class="tag">Frontend</span><span class="tag">Backend</span>
+        </div>
+        <a class="link" href="https://cinewatch-afw4.onrender.com/" target="_blank" rel="noopener">visit site →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="eyebrow">contact</div>
+    <h2>let's build something</h2>
+    <p class="lede">Open to opportunities, feedback, or a good conversation about data.</p>
+
+    <div class="contact-panel reveal">
+      <div>
+        <div class="status-pill"><span class="sd"></span>open to opportunities</div>
+        <h2>Let's talk</h2>
+        <p>Have a project, internship, or idea in mind? I'd love to hear about it.</p>
+      </div>
+      <div class="contact-rows">
+        <a class="crow" href="mailto:codenkanika@mail.com"><span>email</span><span>codenkanika@mail.com</span></a>
+        <a class="crow" href="https://github.com/codeNkanika" target="_blank" rel="noopener"><span>github</span><span>codeNkanika →</span></a>
+        <a class="crow" href="https://medium.com/@codenkanika" target="_blank" rel="noopener"><span>medium</span><span>@codenkanika →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Kanika. Built while learning, on purpose.</p>
+</footer>
+
+<script>
+  // scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
